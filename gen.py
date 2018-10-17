@@ -28,6 +28,8 @@ class Generator(object):
     def generate(self, players=2, width=10, number_of_moves=4, show_paths=False):
         """pass args into prolog"""
         seed = random.randint(1,100)
+        with open("seed_log.txt", "w") as seed_log:
+            seed_log.write(f"seed={seed}")
         process = subprocess.Popen(['clingo', '-n', '1', '--rand-freq=1', f'--seed={seed}','generator/core.pl', 'generator/sim.pl', '-c', f'number_of_players={players}', '-c',f'width={width}', '-c', f'number_of_moves={number_of_moves}'], stdout=subprocess.PIPE)
         response, err = process.communicate()
         if not err:
@@ -81,14 +83,15 @@ class Generator(object):
             output = []
             print()
             print(color)
+            print("   1234567890")
             for row in range(width):
                 output.append([])
                 for col in range(width):
                     output[row].append(" ")
             for touch in path:
-                output[int(touch[0])-1][int(touch[1])-1] = color[0].lower()
+                output[int(touch[1])-1][int(touch[0])-1] = color[0].lower()
             for line in output:
-                print("".join(line))
+                print(f'{output.index(line) + 1}: {"".join(line)}')
 
 if __name__ == "__main__":
     fire.Fire(Generator)
