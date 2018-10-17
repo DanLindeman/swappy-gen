@@ -43,7 +43,6 @@ class Generator(object):
         if show_paths:
             self.render_paths(output, width)
 
-
     def render_board(self, output, width):
         tiles = []
         for line in output:
@@ -77,7 +76,6 @@ class Generator(object):
             if c:
                 x, y, color = c.groups()
                 paths[color].append((x,y))
-        
 
         for color, path in paths.items():
             output = []
@@ -91,7 +89,6 @@ class Generator(object):
                 output[int(touch[0])-1][int(touch[1])-1] = color[0].lower()
             for line in output:
                 print("".join(line))
-            # print(path)
 
 if __name__ == "__main__":
     fire.Fire(Generator)
