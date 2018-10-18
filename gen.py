@@ -19,8 +19,8 @@ sprites = {
     'floor': ' '
 }
 
-sprite_pattern = re.compile('\n*sprite\(\((\d{1,2}),(\d{1,2})\),(.*),(.*)\)\n*')
-touch_pattern = re.compile('\n*touch\(\((\d{1,2}),(\d{1,2})\),(.*)\)\n*')
+SPRITE_PATTERN = re.compile(r'\n*sprite\(\((\d{1,2}),(\d{1,2})\),(.*),(.*)\)\n*')
+TOUCH_PATTERN = re.compile(r'\n*touch\(\((\d{1,2}),(\d{1,2})\),(.*)\)\n*')
 
 class Generator(object):
     """Shells out to prolog"""
@@ -30,7 +30,7 @@ class Generator(object):
         seed = random.randint(1,100)
         with open("seed_log.txt", "w") as seed_log:
             seed_log.write(f"seed={seed}")
-        process = subprocess.Popen(['clingo', '-n', '1', '--rand-freq=1', f'--seed={seed}','generator/core.pl', 'generator/sim.pl', '-c', f'number_of_players={players}', '-c',f'width={width}', '-c', f'number_of_moves={number_of_moves}'], stdout=subprocess.PIPE)
+        process = subprocess.Popen(['clingo', '-n', '1', '--rand-freq=1', f'--seed={seed}','generator/core.pl', 'generator/sim.pl', 'generator/style.pl', '-c', f'number_of_players={players}', '-c',f'width={width}', '-c', f'number_of_moves={number_of_moves}'], stdout=subprocess.PIPE)
         response, err = process.communicate()
         if not err:
             self.render(response.decode('UTF-8').rstrip(), width, show_paths)
@@ -48,7 +48,7 @@ class Generator(object):
     def render_board(self, output, width):
         tiles = []
         for line in output:
-            c = sprite_pattern.match(line)
+            c = SPRITE_PATTERN.match(line)
             if c:
                 x, y, sprite, color = c.groups()
                 tiles.append((x, y, sprite, color))
@@ -74,7 +74,7 @@ class Generator(object):
         print("********** Paths ************")
         paths = {'green': [], 'blue': [], 'red': [], 'yellow': []}
         for line in output:
-            c = touch_pattern.match(line)
+            c = TOUCH_PATTERN.match(line)
             if c:
                 x, y, color = c.groups()
                 paths[color].append((x,y))
@@ -83,7 +83,7 @@ class Generator(object):
             output = []
             print()
             print(color)
-            print("   1234567890")
+            # print("   1234567890")
             for row in range(width):
                 output.append([])
                 for col in range(width):
@@ -91,7 +91,7 @@ class Generator(object):
             for touch in path:
                 output[int(touch[1])-1][int(touch[0])-1] = color[0].lower()
             for line in output:
-                print(f'{output.index(line) + 1}: {"".join(line)}')
+                print("".join(line))
 
 if __name__ == "__main__":
     fire.Fire(Generator)
