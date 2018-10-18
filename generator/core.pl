@@ -26,9 +26,9 @@ wall(none, wall).
 % :- not sprite((10,10), player, blue).
 % :- not sprite((2,1), goal, blue).
 
-% There is one goal and one player token for every color -- BUG
-:- not number_of_players { sprite(T, goal, C) } number_of_players.
-:- not number_of_players { sprite(T, player, C) } number_of_players.
+% There is one goal and one player token for every color
+1 { sprite(T, goal, C): tile(T) } 1 :- goal(C, goal).
+1 { sprite(T, player, C): tile(T) } 1 :- player(C, player).
 
 % Walls don't overlap goals and characters
 :- sprite(T, wall, C), sprite(T, player, C).
@@ -38,8 +38,8 @@ wall(none, wall).
 % players do not start on goals
 :- sprite(T, player, C1), sprite(T, goal, C2).
 
-% There are wall sprites in 50% of tiles, doors in 10%
+% There are wall sprites in 50% of tiles, doors in 25-50%
 :- not width*width/2 { sprite(T, wall, C)} width*width/2.
-:- not width*width/2 { sprite(T, door, C)} width*width/2.
+:- not width*width/4 { sprite(T, door, C)} width*width/2.
 
 #show sprite/3.
