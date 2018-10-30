@@ -83,7 +83,6 @@ class Generator(object):
             output = []
             print()
             print(color)
-            # print("   1234567890")
             for row in range(width):
                 output.append([])
                 for col in range(width):
