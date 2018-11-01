@@ -25,7 +25,7 @@ TOUCH_PATTERN = re.compile(r'\n*touch\(\((\d{1,2}),(\d{1,2})\),(.*)\)\n*')
 class Generator(object):
     """Shells out to prolog"""
 
-    def generate(self, players=2, width=10, number_of_moves=4, show_paths=False):
+    def generate(self, players=2, width=10, number_of_moves=10, show_paths=False):
         """pass args into prolog"""
         seed = random.randint(1,100)
         with open("seed_log.txt", "w") as seed_log:
