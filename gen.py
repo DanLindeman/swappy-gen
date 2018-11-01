@@ -37,6 +37,35 @@ class Generator(object):
         else:
             print(err)
 
+    def run_with_preset_level(self, show_paths=False, level_num="01"):
+        """pass args into prolog"""
+        seed = random.randint(1,100)
+        with open("seed_log.txt", "w") as seed_log:
+            seed_log.write(f"seed={seed}")
+        width, players = self.get_params_from_input_file(level_num)
+        # process = subprocess.Popen(['clingo', '-n', '1', '--rand-freq=1', f'--seed={seed}', f'graph/output/{level_num}.pl','generator/core.pl','generator/sim.pl', '-c', f'number_of_players={players}', '-c',f'width={width}'], stdout=subprocess.PIPE)
+        process = subprocess.Popen(['clingo', '-n', '1', '--rand-freq=1', f'--seed={seed}', f'graph/output/{level_num}.pl', '-c', f'number_of_players={players}', '-c',f'width={width}'], stdout=subprocess.PIPE)
+        response, err = process.communicate()
+        if not err:
+            self.render(response.decode('UTF-8').rstrip(), width, show_paths)
+        else:
+            print(err)
+
+    def get_params_from_input_file(self, level_num):
+        with open(f'graph/output/{level_num}.pl') as level:
+            max_x = 1
+            max_y = 1
+            players = 0
+            for line in level.readlines():
+                c = SPRITE_PATTERN.match(line)
+                x, y, sprite, _ = c.groups()
+                if int(x) > max_x: max_x = int(x)
+                if int(y) > max_y: max_y = int(y)
+                if sprite == 'player':
+                    players += 1
+        width = max(max_x, max_y)
+        return width, players
+
     def render(self, raw_output, width, show_paths):
         """Parse the raw output and place sprites into square NxN grid where n=width"""
         no_newlines = re.sub("\n", " ", raw_output)
