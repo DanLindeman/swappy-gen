@@ -43,8 +43,7 @@ class Generator(object):
         with open("seed_log.txt", "w") as seed_log:
             seed_log.write(f"seed={seed}")
         width, players = self.get_params_from_input_file(level_num)
-        # process = subprocess.Popen(['clingo', '-n', '1', '--rand-freq=1', f'--seed={seed}', f'graph/output/{level_num}.pl','generator/core.pl','generator/sim.pl', '-c', f'number_of_players={players}', '-c',f'width={width}'], stdout=subprocess.PIPE)
-        process = subprocess.Popen(['clingo', '-n', '1', '--rand-freq=1', f'--seed={seed}', f'graph/output/{level_num}.pl', '-c', f'number_of_players={players}', '-c',f'width={width}'], stdout=subprocess.PIPE)
+        process = subprocess.Popen(['clingo', '-n', '1', '--rand-freq=1', f'--seed={seed}', f'graph/output/{level_num}.pl','generator/core.pl','generator/sim.pl', '-c', f'number_of_players={players}', '-c',f'width={width}'], stdout=subprocess.PIPE)
         response, err = process.communicate()
         if not err:
             self.render(response.decode('UTF-8').rstrip(), width, show_paths)

@@ -1,6 +1,6 @@
 % https://users.soe.ucsc.edu/~amsmith/papers/tciaig-asp4pcg.pdf
 #const width=10.
-#const number_of_moves=10.
+#const number_of_moves=4.
 #const number_of_players=2.
 dim(1..width).
 tile((X,Y)) :- dim(X), dim(Y).
@@ -21,6 +21,7 @@ player(C, player) :- sprite(T, player, C).
 % are players special cases where having many types is okay? Future work.
 0 { sprite(T, S, C) : player(C, S)} 1 :- tile(T).
 
+% Have correct player and goal count
 :- { sprite(T, goal, C) } != number_of_players.
 :- { sprite(T, player, C) } != number_of_players.
 
@@ -29,7 +30,6 @@ player(C, player) :- sprite(T, player, C).
 
 % No Duplicate goals
 :- sprite(T1, goal, C1), sprite(T2, goal, C2), C1==C2, T1!=T2.
-
 
 % Walls don't overlap goals and characters
 :- sprite(T, wall, C), sprite(T, player, C).

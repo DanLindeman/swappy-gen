@@ -21,7 +21,7 @@ adj((X1,Y1),(X2,Y2)) :-
 % Walking rules:
 
 % You can walk on adjacent tiles
-{ touch(T2, C): adj(T1,T2) } :- touch(T1, C).
+{ touch(T2, C) : adj(T1,T2) } :- touch(T1, C).
 
 % You can never walk through a wall
 :- sprite(T, wall, none), touch(T, C).
@@ -31,30 +31,31 @@ adj((X1,Y1),(X2,Y2)) :-
 % I love that doors are a special case of a wall. Doorwall ;) 
 :- sprite(T, door, C1), touch(T, C2), C1 != C2.
 
+% Swapping rules
+{ touch((X2, Y2), C1) } :-
+    touch((X1, Y1), C1), 
+    touch((X2, Y2), C2), 
+    X1=X2, 
+    Y1!=Y2, 
+    C1!=C2.
+
+{ touch((X2, Y2), C2) } :-
+    touch((X1, Y1), C1), 
+    touch((X2, Y2), C2), 
+    Y1=Y2, 
+    X1!=X2, 
+    C1!=C2.
+
 % You can see anything adjacent to you, regardless of doors between you.
 { see(T2, C): adj(T1,T2) } :- see(T1, C).
 
 % You still can't see through walls.
 :- sprite(T, wall, none), see(T, C).
 
-% Don't generate a level where every player can't see a goal. This is 'sees their own goal'
+% Don't generate a level where every player can't see a goal.
 see_a_goal(C1) :- finish(T, C1), see(T, C2), C1 != C2.
-% see_a_goal(C) :- { see(T, C) }, sprite(T1, player, C), sprite(T, goal, C).
-% { see_a_goal(C): color(C) } == number_of_players.
-
-% Rejects any level where any goal isn't visible to a player -- BUG
 :- player(C, player), not see_a_goal(C).
 :- not number_of_players { see_a_goal(C) : color(C), player(C, player) }.
-
-% Swapping rules:
-% This is too broad! It doesn't really capture the temporal nature of swapping.
-% That is, just because I have ever been able to get to my goal
-% doesn't mean that I can end up there at the same time as every other player
-{ touch((X2, Y2), C1) } :-
-    touch((X1, Y1), C1), touch((X2, Y2), C2), X1=X2, Y1!=Y2, C1!=C2.
-
-{ touch((X2, Y2), C2) } :-
-    touch((X1, Y1), C1), touch((X2, Y2), C2), Y1=Y2, X1!=X2, C1!=C2.
 
 % This is the problem. Completion isn't merely touching your goal
 % Completion should be touching your goal at the same time as everyone else
@@ -66,5 +67,4 @@ completed(C) :- finish(T, C), touch(T, C).
 % The number of spaces touched by every player must equal number_of_moves -- BUG: counts overall total num moves
 % :- not {touch(T,C): player(C, player)} == number_of_moves * number_of_players.
 
-#show see/2.
 #show touch/2.
