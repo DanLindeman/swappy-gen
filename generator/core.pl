@@ -14,9 +14,9 @@ goal(C, goal) :- sprite(T, goal, C).
 player(C, player) :- sprite(T, player, C).
 
 % tiles have at most one non-floor type 
-0 { sprite(T, S, C) : goal(C, S)} 1 :- tile(T).
-0 { sprite(T, S, C) : door(C, S)} 1 :- tile(T).
-0 { sprite(T, S, C) : wall(C, S)} 1 :- tile(T).
+0 { sprite(T, S, C) : goal(C, S) } 1 :- tile(T).
+0 { sprite(T, S, C) : door(C, S) } 1 :- tile(T).
+0 { sprite(T, S, C) : wall(C, S) } 1 :- tile(T).
 
 % are players special cases where having many types is okay? Future work.
 0 { sprite(T, S, C) : player(C, S)} 1 :- tile(T).
@@ -42,5 +42,9 @@ player(C, player) :- sprite(T, player, C).
 % Don't put players or goals on doors.
 :- sprite(T, player, C1), sprite(T, door, C2).
 :- sprite(T, goal, C1), sprite(T, door, C2).
+
+% There are wall sprites in 50% of tiles, doors in 33-50%
+:- not width*width/2 { sprite(T, wall, C)} width*width/2.
+:- not width*width/3 { sprite(T, door, C)} width*width/2.
 
 #show sprite/3.
