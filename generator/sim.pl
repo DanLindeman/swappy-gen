@@ -33,17 +33,17 @@ adj((X1,Y1),(X2,Y2)) :-
 
 % Swapping rules
 { touch((X2, Y2), C1) } :-
-    touch((X1, Y1), C1), 
-    touch((X2, Y2), C2), 
-    X1=X2, 
-    Y1!=Y2, 
+    touch((X1, Y1), C1),
+    touch((X2, Y2), C2),
+    X1=X2,
+    Y1!=Y2,
     C1!=C2.
 
-{ touch((X2, Y2), C2) } :-
-    touch((X1, Y1), C1), 
-    touch((X2, Y2), C2), 
-    Y1=Y2, 
-    X1!=X2, 
+{ touch((X2, Y2), C1) } :-
+    touch((X1, Y1), C1),
+    touch((X2, Y2), C2),
+    Y1=Y2,
+    X1!=X2,
     C1!=C2.
 
 % You can see anything adjacent to you, regardless of doors between you.
@@ -53,7 +53,7 @@ adj((X1,Y1),(X2,Y2)) :-
 :- sprite(T, wall, none), see(T, C).
 
 % Don't generate a level where every player can't see a goal.
-see_a_goal(C1) :- finish(T, C1), see(T, C2), C1 != C2.
+see_a_goal(C) :- finish(T, C2), see(T, C), C != C2.
 :- player(C, player), not see_a_goal(C).
 :- not number_of_players { see_a_goal(C) : color(C), player(C, player) }.
 
