@@ -2,6 +2,8 @@ import fire
 import subprocess
 import re
 import random
+import time
+
 sprites = {
     'wall': '#',
     'green_player': 'G',
@@ -11,10 +13,10 @@ sprites = {
     'blue_goal': '*',
     'blue_door': 'b',
     'yellow_player': 'Y',
-    'yellow_goal': '+',
+    'yellow_goal': '-',
     'yellow_door': 'y',
     'red_player': 'R',
-    'red_goal': '-',
+    'red_goal': '+',
     'red_door': 'r',
     'floor': ' '
 }
@@ -25,17 +27,33 @@ TOUCH_PATTERN = re.compile(r'\n*touch\(\((\d{1,2}),(\d{1,2})\),(.*)\)\n*')
 class Generator(object):
     """Shells out to prolog"""
 
-    def generate(self, players=2, width=10, number_of_moves=10, show_paths=False):
+    def generate(self, players=3, width=8, number_of_moves=5, show_paths=False):
         """pass args into prolog"""
         seed = random.randint(1,100)
+        start_time = time.time()
         with open("seed_log.txt", "w") as seed_log:
             seed_log.write(f"seed={seed}")
-        process = subprocess.Popen(['clingo', '-n', '1', '--rand-freq=1', f'--seed={seed}','generator/core.pl', 'generator/sim.pl', 'generator/style.pl', '-c', f'number_of_players={players}', '-c',f'width={width}', '-c', f'number_of_moves={number_of_moves}'], stdout=subprocess.PIPE)
+        command_list = ['clingo', '-n', '1', '--rand-freq=1', f'--seed={seed}','generator/core.pl', 'generator/sim.pl', 'generator/style.pl', '-c', f'number_of_players={players}', '-c',f'width={width}', '-c', f'number_of_moves={number_of_moves}']
+        print(f"Run with \n{' '.join(command_list)}")
+        process = subprocess.Popen(['clingo', 
+                                        '-n', 
+                                        '1', 
+                                        '--rand-freq=1', 
+                                        f'--seed={seed}',
+                                        'generator/core.pl', 
+                                        'generator/sim.pl', 
+                                        'generator/style.pl', 
+                                        '-c', f'number_of_players={players}',
+                                        '-c',f'width={width}',
+                                        '-c', f'number_of_moves={number_of_moves}'
+                                    ], stdout=subprocess.PIPE)
         response, err = process.communicate()
         if not err:
             self.render(response.decode('UTF-8').rstrip(), width, show_paths)
         else:
             print(err)
+        elapsed_time = time.time() - start_time
+        print(f'\nLevel Generation done in: {time.strftime("%H:%M:%S", time.gmtime(elapsed_time))}')
 
     def run_with_preset_level(self, show_paths=False, level_num="01"):
         """pass args into prolog"""
