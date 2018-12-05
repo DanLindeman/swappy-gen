@@ -63,10 +63,10 @@ It may produce something that looks like the following.
 This might not look like much to you, but if you throw that into your favorite Swappy client, it's a puzzle!
 
 By default this will generate a 10x10 level with two characters.
-You may wish to add more characters or generate larger or smaller levels to do so pass the following arguments to the `generate` function. For example three character tokens is a 20x20 level would be.
+You may wish to add more characters or generate larger or smaller levels to do so pass the following arguments to the `generate` function. For example three character tokens is a 8x8 level would be.
 
 ```bash 
-python gen.py generate --players=3 --width=20
+python gen.py generate --players=3 --width=8
 ```
 
 Parameter | Explanation
