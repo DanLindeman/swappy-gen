@@ -1,4 +1,3 @@
-% https://users.soe.ucsc.edu/~amsmith/papers/tciaig-asp4pcg.pdf
 #const width=10.
 #const number_of_moves=4.
 #const number_of_players=2.
