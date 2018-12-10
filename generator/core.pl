@@ -10,8 +10,6 @@ door(C, door) :- color(C).
 wall(none, wall).
 goal(C, goal) :- color(C).
 player(C, player) :- color(C).
-goal(C, goal) :- sprite(T, goal, C).
-player(C, player) :- sprite(T, player, C).
 
 % tiles have at most one non-floor type 
 0 { sprite(T, S, C) : goal(C, S) } 1 :- tile(T).
