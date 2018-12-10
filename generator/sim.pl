@@ -17,14 +17,6 @@ adj((X1,Y1),(X2,Y2)) :-
 % You can walk on adjacent tiles
 { touch(T2, C) : adj(T1,T2) } :- touch(T1, C).
 
-% You can never walk through a wall
-:- sprite(T, wall, none), touch(T, C).
-
-% Door rules:
-% You can never walk through a different colored door
-% I love that doors are a special case of a wall. Doorwall ;) 
-:- sprite(T, door, C1), touch(T, C2), C1 != C2.
-
 % Swapping rules
 { touch((X2, Y2), C1) } :-
     touch((X1, Y1), C1),
@@ -40,6 +32,13 @@ adj((X1,Y1),(X2,Y2)) :-
     X1!=X2,
     C1!=C2.
 
+% You can never walk through a wall
+:- sprite(T, wall, none), touch(T, C).
+
+% Door rules:
+% You can never walk through a different colored door
+% I love that doors are a special case of a wall. Doorwall ;)
+:- sprite(T, door, C1), touch(T, C2), C1 != C2.
 
 % This is the problem. Completion isn't merely touching your goal
 % Completion should be touching your goal at the same time as everyone else
