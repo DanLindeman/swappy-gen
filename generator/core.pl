@@ -15,8 +15,6 @@ player(C, player) :- color(C).
 0 { sprite(T, S, C) : goal(C, S) } 1 :- tile(T).
 0 { sprite(T, S, C) : door(C, S) } 1 :- tile(T).
 0 { sprite(T, S, C) : wall(C, S) } 1 :- tile(T).
-
-% are players special cases where having many types is okay? Future work.
 0 { sprite(T, S, C) : player(C, S)} 1 :- tile(T).
 
 % Have correct player and goal count
