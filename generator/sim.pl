@@ -1,6 +1,3 @@
-% Players start
-{ start(T, C) : color(C) } :- sprite(T, player, C).
-
 % The players finish is wherever their same-colored goal is
 { finish(T, C) : color(C) } :- sprite(T, goal, C).
 
