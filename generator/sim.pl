@@ -1,6 +1,3 @@
-% The players finish is wherever their same-colored goal is
-{ finish(T, C) : color(C) } :- sprite(T, goal, C).
-
 % Players touch the first tile they start on
 { touch(T, C) : color(C) } :- sprite(T, player, C).
 
@@ -36,6 +33,9 @@ adj((X1,Y1),(X2,Y2)) :-
 % You can never walk through a different colored door
 % I love that doors are a special case of a wall. Doorwall ;)
 :- sprite(T, door, C1), touch(T, C2), C1 != C2.
+
+% The players finish is wherever their same-colored goal is
+{ finish(T, C) : color(C) } :- sprite(T, goal, C).
 
 % This is the problem. Completion isn't merely touching your goal
 % Completion should be touching your goal at the same time as everyone else
